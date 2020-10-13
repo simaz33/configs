@@ -1,11 +1,11 @@
 #!/bin/sh
 
 B='#00000000'  # blank
-C='#ffffff22'  # clear ish
-D='#ff00ffcc'  # default
-T='#ee00eeee'  # text
-W='#880000bb'  # wrong
-V='#bb00bbbb'  # verifying
+C='#00000000'  # clear ish
+D='#00000000'  # default
+T='#ffffffff'  # text
+W='#ff000040'  # wrong
+V='#00000000'  # verifying
 
 /usr/bin/i3lock \
 --insidevercolor=$C   \
