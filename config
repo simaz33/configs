@@ -218,3 +218,6 @@ exec --no-startup-id syndaemon -i 0.5 -t -K -R
 
 # Switch between keyboard layouts [us, lt]
 exec --no-startup-id setxkbmap -layout us,lt -option grp:alt_shift_toggle
+
+# Set background a static colot
+exec --no-startup-id xsetroot -solid "#000000"
