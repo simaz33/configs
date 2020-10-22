@@ -15,7 +15,7 @@ case $BAT_state in
 	*discharging*)
 		BAT_state="BATR"
 		;;
-	full*full)
+	full*full | full*unknown)
 		BAT_state="FULL"
 		;;
 	*charging*)
