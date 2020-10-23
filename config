@@ -46,7 +46,7 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 10
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal # <- default
-bindsym Ctrl+Mod1+t exec i3-sensible-terminal
+bindsym Ctrl+Mod1+t exec terminator
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -189,16 +189,18 @@ bar {
 
 }
 
-# Autostart applications
-assign [class="(?i)konsole"] $ws1
+# Assign applications to specific workspaces and autostart applications
+assign [class="(?i)terminator"] $ws1
 
-exec --no-startup-id /usr/bin/konsole
+exec --no-startup-id /usr/bin/terminator
+exec --no-startup-id /usr/bin/terminator
+
 
 assign [class="(?i)firefox"] $ws2
 
 exec --no-startup-id /usr/bin/firefox
 
-exec --no-startup-id /usr/bin/konsole -p 'tabtitle=htop' -e htop
+exec --no-startup-id /usr/bin/terminator --title=htop -x htop
 for_window [title="htop*"] move window to workspace 10
 
 # Dual monitor settings

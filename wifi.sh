@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 
 # Using NetworkManager interface to get wifi network name and signal strength
-signal_ssid=$(nmcli device wifi | grep "^*" | awk '{print $3}')
+signal_ssid=$(nmcli c | head -2 | tail -1 | awk '{print $1}')
 signal_strength=$(nmcli device wifi | grep "^*" | awk '{print $8}')
 
 # Full text
