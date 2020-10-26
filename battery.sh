@@ -8,7 +8,7 @@ BAT_prcnt=$(($(cat /sys/class/power_supply/BAT*/capacity | awk '{prcnt += $1} EN
 
 # Get battery states and display them in one line
 BAT_state=$(cat /sys/class/power_supply/BAT*/status | tr '[:upper:]' '[:lower:]')
-BAT_state=$(echo $BAT_state | tr -d '\n')
+BAT_state=$(echo $BAT_state | tr -d '\n' | tr '[:upper:]' '[:lower:]')
 
 # Determine what state to display
 case $BAT_state in
