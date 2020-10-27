@@ -35,8 +35,8 @@ exec --no-startup-id nm-applet
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
 #bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status # <- default
-bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/inc_vol.sh; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks 
+bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/inc_vol.sh && pactl set-sink-mute @DEFAULT_SINK@ false &&  pkill -SIGRTMIN+10 i3blocks
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && pactl set-sink-mute @DEFAULT_SINK@ false && pkill -SIGRTMIN+10 i3blocks 
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle; exec --no-startup-id pkill -SIGRTIM+10 i3blocks
 
@@ -201,7 +201,7 @@ assign [class="(?i)firefox"] $ws2
 exec --no-startup-id /usr/bin/firefox
 
 exec --no-startup-id /usr/bin/terminator --title=htop -x htop
-for_window [title="htop*"] move window to workspace 10
+for_window [title="htop"] move window to workspace 10
 
 # Dual monitor settings
 # Set resolution of second monitor and move it to the right of main screen

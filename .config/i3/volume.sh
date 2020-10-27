@@ -1,18 +1,23 @@
 #!/usr/bin/sh
 
-muted=$(pactl list sinks | grep '^[[:space:]]Mute:' | awk '{print $2}')
-curr_vol=''
+muted=$(pacmd list-sinks | grep -A 11 \* | tail -1 | cut -d ' ' -f 2)
+volume=''
 color=''
 
 if [[ $muted == yes ]]
 then
-	curr_vol="MUT"
+	volume="MUT"
 	color=\#FFA500
 else
-	curr_vol=$(pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,')%
+	volume=$(pacmd list-sinks | grep -A 7 \* | tail -1 | cut -d '/' -f2 | tr -d ' %')%
 	color=\#FFFFFF	
 fi	
 
-echo "VOL $curr_vol"
+# Full text
+echo "VOL $volume"
+
+# Short text
 echo
+
+# Color
 echo $color
