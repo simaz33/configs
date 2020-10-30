@@ -20,12 +20,11 @@ else
 	else
 		# Using NetworkManager interface to get wifi network name and signal strength
 		signal_ssid=$(nmcli c | head -2 | tail -1 | awk '{print $1}')
-		signal_strength=$(nmcli device wifi | grep "^*" | awk '{print $8}')
+        signal_strength=$(cat /proc/net/wireless | tail -1 | awk '{print $3}' | tr -d '.')
+        signal_strength=$(($signal_strength * 100 / 70))
 		color=\#00FF00
 	fi
 fi 
-
-
 
 # Full text
 if [[ $signal_ssid ]]
