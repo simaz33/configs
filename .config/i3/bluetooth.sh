@@ -1,8 +1,8 @@
 #!/usr/bin/sh
 
 name=$(bluetooth | awk '{print $3}')
-#name=""
 color=\#797979
+bluetooth_symbol="\uf294"
 
 if [[ $name = off ]]
 then
@@ -21,7 +21,7 @@ else
 fi
 
 # Full text
-echo "BT:($name)"
+echo -e "$bluetooth_symbol $name"
 
 # Short text
 echo

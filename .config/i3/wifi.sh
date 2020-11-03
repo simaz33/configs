@@ -2,6 +2,7 @@
 
 # Check if wifi is on
 name=$(wifi | cut -d '=' -f2 | cut -d ' ' -f2)
+wifi_symbol="\uf1eb"
 is_connected=""
 signal_ssid=""
 signal_strength=""
@@ -29,9 +30,9 @@ fi
 # Full text
 if [[ $signal_ssid ]]
 then
-	echo "W:($signal_strength% $signal_ssid)"
+	echo -e "$wifi_symbol [$signal_strength%] $signal_ssid"
 else
-	echo "W:($name)"
+	echo -e "$wifi_symbol $name"
 fi
 
 # Short text

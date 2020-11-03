@@ -10,29 +10,52 @@ BAT_prcnt=$(($(cat /sys/class/power_supply/BAT*/capacity | awk '{prcnt += $1} EN
 BAT_state=$(cat /sys/class/power_supply/BAT*/status | tr '[:upper:]' '[:lower:]')
 BAT_state=$(echo $BAT_state | tr -d '\n' | tr '[:upper:]' '[:lower:]')
 
+# Battery symbol and color
+BAT_symbol=""
+color=""
+
 # Determine what state to display
 case $BAT_state in
 	*discharging*)
-		BAT_state="BATR"
+		BAT_state=""
 		;;
 	full*full | full*unknown)
 		BAT_state="FULL"
 		;;
 	*charging*)
-		BAT_state="CHRG"
+		BAT_state="\uf0e7"
 		;;
 	*)
-		BAT_state="UNKW"
+		BAT_state="\uf128"
 		;;
 esac
 
-# Full text
-echo "$BAT_state $BAT_prcnt%"
+if [[ $BAT_prcnt -ge 75 ]]
+then
+    BAT_symbol="\uf240"
+    color=\#00FF00
+elif [[ $BAT_prcnt -ge 50 ]]
+then
+    BAT_symbol="\uf241"
+    color=\#ADFF2F
+elif [[ $BAT_prcnt -ge 25 ]] 
+then
+    BAT_symbol="\uf242"
+    color=\#FFFF00
+elif [[ $BAT_prcnt -ge 0 ]]
+then
+    BAT_symbol="\uf243"
+    color=\#FF0000
+else
+    BAT_symbol="\uf244"
+    color=\#FF0000
+fi
+
+#Full text
+echo -e "$BAT_state$BAT_symbol $BAT_prcnt%"
 
 # Short text (empty because the format is already short)
 echo
 
 # If battery percent is greater then 70% it is displayed as green, between 70% and 20% - yellow, equal or less than 20% - red
-[ $BAT_prcnt -gt 70 ] && echo \#00FF00
-[ $BAT_prcnt -le 70 ] && [ $BAT_prcnt -gt 20 ] && echo \#FFFF00
-[ $BAT_prcnt -le 20 ] && echo \#FF0000
+echo $color
