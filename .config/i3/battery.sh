@@ -20,7 +20,7 @@ case $BAT_state in
 		BAT_state=""
 		;;
 	full*full | full*unknown)
-		BAT_state="\uf164"
+		BAT_state="\uf00c"
 		;;
 	*charging*)
 		BAT_state="\uf0e7"

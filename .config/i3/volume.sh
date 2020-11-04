@@ -11,10 +11,10 @@ then
 else
 	volume=$(pacmd list-sinks | grep -A 7 \* | tail -1 | cut -d '/' -f2 | tr -d ' %')
     volume_symbol=""
-    if [[ $volume -ge 75 ]]
+    if [[ $volume -ge 100 ]]
     then
         volume_symbol="\uf028" 
-    elif [[ $volume -lt 75 && $volume -ne 0 ]]
+    elif [[ $volume -lt 100 && $volume -ne 0 ]]
     then
         volume_symbol="\uf027"
     else
