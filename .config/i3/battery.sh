@@ -20,7 +20,7 @@ case $BAT_state in
 		BAT_state=""
 		;;
 	full*full | full*unknown)
-		BAT_state="FULL"
+		BAT_state="\uf164"
 		;;
 	*charging*)
 		BAT_state="\uf0e7"
@@ -52,7 +52,7 @@ else
 fi
 
 #Full text
-echo -e "$BAT_state$BAT_symbol $BAT_prcnt%"
+echo -e "$BAT_state $BAT_symbol $BAT_prcnt%"
 
 # Short text (empty because the format is already short)
 echo
