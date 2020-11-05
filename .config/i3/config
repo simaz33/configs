@@ -193,7 +193,7 @@ bar {
 # Assign applications to specific workspaces and autostart applications
 #assign [class="(?i)terminator"] $ws1
 
-exec --no-startup-id /usr/bin/terminator
+exec --no-startup-id /usr/bin/terminator 
 exec --no-startup-id /usr/bin/terminator
 
 exec --no-startup-id /usr/bin/firefox
