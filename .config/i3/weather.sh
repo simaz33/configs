@@ -8,12 +8,16 @@ chmod 666 $cities_tmp
 city=$(cat $cities | head -1)
 tail -n +2 $cities > $cities_tmp && mv $cities_tmp $cities && echo $city >> $cities
 
-weat=$(curl -Ss https://wttr.in/$city?0T | tac | tac | head -3 | tail -1 | cut -b 17-)
-temp=$(curl -Ss https://wttr.in/$city?0T | tac | tac | head -4 | tail -1 | cut -b 17- | cut -d 'C' -f 1)C
+response=$(curl -Ss https://wttr.in/$city?0T)
+
+[ !$(response) ] && echo "Wttr is down" && echo && echo \#797979 && exit
+
+weat=$($response | tac | tac | head -3 | tail -1 | cut -b 17-)
+temp=$($response | tac | tac | head -4 | tail -1 | cut -b 17- | cut -d 'C' -f 1)C
 color=""
 
 # Check if city exist
-[ $(curl -s https://wttr.in/$city?0T | tail -6 | grep unable) ] && echo "NO WEATHER" && echo && echo \#FF0000 && exit
+[ $(curl -s https://wttr.in/$city?0T | tail -6 | grep unable) ] && echo "$city not found" && echo && echo \#797979 && exit
 
 temp_nrs=$(echo $temp | cut -d ' ' -f 1)
 avg_temp=$((($(echo $temp_nrs | cut -d '.' -f 1) + $(echo $temp_nrs | cut -d '.' -f 3)) / 2))
