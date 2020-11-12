@@ -15,7 +15,8 @@ color=""
 # Check if city exist
 [ $(curl -s https://wttr.in/$city?0T | tail -6 | grep unable) ] && echo "NO WEATHER" && echo && echo \#FF0000 && exit
 
-avg_temp=$((($(echo $temp | cut -b 1) + $(echo $temp | cut -b 4)) / 2))
+temp_nrs=$(echo $temp | cut -d ' ' -f 1)
+avg_temp=$((($(echo $temp_nrs | cut -d '.' -f 1) + $(echo $temp_nrs | cut -d '.' -f 3)) / 2))
 
 case $avg_temp in
     3[5-9])
