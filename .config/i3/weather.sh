@@ -10,14 +10,14 @@ tail -n +2 $cities > $cities_tmp && mv $cities_tmp $cities && echo $city >> $cit
 
 response=$(curl -Ss https://wttr.in/$city?0T)
 
-[ !$(response) ] && echo "Wttr is down" && echo && echo \#797979 && exit
+[ !$response ] && echo "Wttr is down" && echo && echo \#797979 && exit
 
-weat=$($response | tac | tac | head -3 | tail -1 | cut -b 17-)
-temp=$($response | tac | tac | head -4 | tail -1 | cut -b 17- | cut -d 'C' -f 1)C
+weat=$(echo "$response" | head -3 | tail -1 | cut -b 17-)
+temp=$(echo "$response" | head -4 | tail -1 | cut -b 17- | cut -d 'C' -f 1)C
 color=""
 
 # Check if city exist
-[ $(curl -s https://wttr.in/$city?0T | tail -6 | grep unable) ] && echo "$city not found" && echo && echo \#797979 && exit
+[ $(echo "$response" | tail -6 | grep unable) ] && echo "$city not found" && echo && echo \#797979 && exit
 
 temp_nrs=$(echo $temp | cut -d ' ' -f 1)
 avg_temp=$((($(echo $temp_nrs | cut -d '.' -f 1) + $(echo $temp_nrs | cut -d '.' -f 3)) / 2))
