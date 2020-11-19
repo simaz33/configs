@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 
 # Check if wifi is on
-name=$(wifi | cut -d '=' -f2 | cut -d ' ' -f2)
+name=$(wifi | awk '{print $3}')
 wifi_symbol="\uf1eb"
 is_connected=""
 signal_ssid=""
