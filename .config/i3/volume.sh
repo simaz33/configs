@@ -1,34 +1,45 @@
 #!/usr/bin/sh
+# change_volume
 
 muted=$(pacmd list-sinks | grep -A 11 \* | tail -1 | cut -d ' ' -f 2)
 volume=''
+volume_symbol=''
 color=''
+image=''
 
 if [[ $muted == yes ]]
 then
-	volume="\uf6a9"
-	color=\#FFA500
+    volume_symbol="\uf6a9"
+    color=\#FFA500
+    image=~/.config/i3/volume_mute.png
 else
 	volume=$(pacmd list-sinks | grep -A 7 \* | tail -1 | cut -d '/' -f2 | tr -d ' %')
-    volume_symbol=""
-    if [[ $volume -ge 100 ]]
+    if [[ $volume -ge 90 ]]
     then
-        volume_symbol="\uf028" 
-    elif [[ $volume -lt 100 && $volume -ne 0 ]]
+        volume_symbol="\uf028"
+        image=~/.config/i3/volume_high.png 
+    elif [[ $volume -ge 50 ]]
     then
         volume_symbol="\uf027"
+        image=~/.config/i3/volume_medium.png
+    elif [[ $volume -gt 0 ]]
+    then
+        volume_symbol="\uf027"
+        image=~/.config/i3/volume_low.png
     else
         volume_symbol="\uf026"
+        image=~/.config/i3/volume_mute.png
     fi
-    volume="$volume_symbol $volume"
-	color=\#FFFFFF	
+    color=\#FFFFFF	
 fi	
 
 # Full text
-echo -e "$volume"
+echo -e "$volume_symbol $volume"
 
 # Short text
 echo
 
 # Color
 echo $color
+
+dunstify -u low -t 1100 -I $image -r 5000 "$volume" 
