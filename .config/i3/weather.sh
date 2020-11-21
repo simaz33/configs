@@ -24,34 +24,43 @@ avg_temp=$((($(echo $temp_nrs | cut -d '.' -f 1) + $(echo $temp_nrs | cut -d '.'
 
 case $avg_temp in
     3[5-9])
-        color=\#FFA500
+        color=\#CC3300
         ;;
     3[0-4])
-        color=\#FFFF00
+        color=\#FF6600
         ;;
     2[5-9])
-        color=\#B2FF66
+        color=\#FF9933
         ;;
     2[0-4])
-        color=\#00CC00
+        color=\#FFCC00
         ;;
     1[5-9])
-        color=\#00FFFF
+        color=\#FFFF00
         ;;
     1[0-4])
-        color=\#66B2FF
+        color=\#FFFF00
         ;;
     [5-9])
-        color=\#0080FF
+        color=\#00FF00
         ;;
     [0-4])
-        color=\#0000FF
+        color=\#00FFFF
         ;;
     -[1-4])
-        color=\#000099
+        color=\#00CCFF
+        ;;
+    -[5-9])
+        color=\#0099FF
+        ;;
+    -1[0-5])
+        color=\#0000FF
+        ;;
+    -1[6-9])
+        color=\#CC33FF
         ;;
     -[0-9]*)
-        color=\#6600CC
+        color=\#FF00FF
         ;;
     [0-9]*)
         color=\#FF0000
