@@ -1,5 +1,8 @@
 #!/usr/bin/sh
 
+BAT_symbol=""
+color=""
+
 # Determine battery count
 BAT_count=$(ls /sys/class/power_supply/ | grep BAT* | wc -l)
 
@@ -9,10 +12,6 @@ BAT_prcnt=$(($(cat /sys/class/power_supply/BAT*/capacity | awk '{prcnt += $1} EN
 # Get battery states and display them in one line
 BAT_state=$(cat /sys/class/power_supply/BAT*/status | tr '[:upper:]' '[:lower:]')
 BAT_state=$(echo $BAT_state | tr -d '\n' | tr '[:upper:]' '[:lower:]')
-
-# Battery symbol and color
-BAT_symbol=""
-color=""
 
 # Determine what state to display
 case $BAT_state in
@@ -51,11 +50,11 @@ else
     color=\#FF0000
 fi
 
-#Full text
+# Full text
 echo -e "$BAT_state $BAT_symbol $BAT_prcnt%"
 
 # Short text (empty because the format is already short)
 echo
 
-# If battery percent is greater then 70% it is displayed as green, between 70% and 20% - yellow, equal or less than 20% - red
+# Color
 echo $color

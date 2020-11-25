@@ -87,7 +87,7 @@ bindsym $mod+Shift+Right move right
 #bindsym $mod+h split h # <- default
 
 # split in vertical orientation
-bindsym $mod+v split v
+bindsym $mod+t split toggle
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -153,6 +153,9 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
+# user Flameshot to take screenshots 
+bindsym $mod+Print exec --no-startup-id flameshot gui
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
@@ -191,15 +194,13 @@ bar {
 }
 
 # Assign applications to specific workspaces and autostart applications
-#assign [class="(?i)terminator"] $ws1
-
-exec --no-startup-id /usr/bin/terminator && /usr/bin/terminator 
-#exec --no-startup-id /usr/bin/terminator
+exec --no-startup-id "/usr/bin/terminator && sleep 1"
+exec --no-startup-id "/usr/bin/terminator && sleep 1"
 
 exec --no-startup-id /usr/bin/firefox
 for_window [title="(?i)firefox"] move window to workspace $ws2
 
-exec --no-startup-id /usr/bin/terminator --title=htop -x htop
+exec --no-startup-id "/usr/bin/terminator --title=htop -x htop && sleep 1"
 for_window [title="htop"] move window to workspace $ws10
 
 # Dual monitor settings
