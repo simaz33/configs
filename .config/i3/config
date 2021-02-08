@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace, FontAwesome 9
+font pango: FontAwesome bold 9
 #font DjaVuSansMono bold 5
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
@@ -27,7 +27,7 @@ font pango:monospace, FontAwesome 9
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --transfer-sleep-lock --lock.sh --nofork
 
-bindsym $mod+Mod1+l exec --no-startup-id $HOME/.config/i3/lock.sh
+bindsym $mod+l exec --no-startup-id $HOME/.config/i3/lock.sh
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -36,14 +36,17 @@ exec --no-startup-id nm-applet
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
 #bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status # <- default
-bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/inc_vol.sh && pactl set-sink-mute @DEFAULT_SINK@ false &&  pkill -SIGRTMIN+10 i3blocks
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && pactl set-sink-mute @DEFAULT_SINK@ false && pkill -SIGRTMIN+10 i3blocks 
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle; exec --no-startup-id pkill -SIGRTIM+10 i3blocks
+bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/.config/i3/inc_vol.sh && pactl set-sink-mute @DEFAULT_SINK@ false &&  pkill -SIGRTMIN+10 i3blocks && $HOME/.config/i3/volume_status.sh
+
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && pactl set-sink-mute @DEFAULT_SINK@ false && pkill -SIGRTMIN+10 i3blocks && $HOME/.config/i3/volume_status.sh
+
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks && $HOME/.config/i3/volume_status.sh
+
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle; exec --no-startup-id pkill -SIGRTIM+10 i3blocks && $HOME/.config/i3/volume_status.sh
 
 # Screen brightness control using xbacklight
-bindsym XF86MonBrightnessUp exec xbacklight -inc 5
-bindsym XF86MonBrightnessDown exec xbacklight -dec 5
+bindsym XF86MonBrightnessUp exec xbacklight -inc 5 && $HOME/.config/i3/brightness_status.sh
+bindsym XF86MonBrightnessDown exec xbacklight -dec 5 && $HOME/.config/i3/brightness_status.sh
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal # <- default
@@ -60,10 +63,10 @@ bindsym $mod+d exec dmenu_run
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+l focus right
+#bindsym $mod+h focus left
+#bindsym $mod+j focus down
+#bindsym $mod+k focus up
+#bindsym $mod+l focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -72,10 +75,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
+#bindsym $mod+Shift+h move left
+#bindsym $mod+Shift+j move down
+#bindsym $mod+Shift+k move up
+#bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -111,8 +114,8 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1:"
-set $ws2 "2:"
+set $ws1 "1: "
+set $ws2 "2: "
 set $ws3 "3"
 set $ws4 "4"
 set $ws5 "5"
@@ -120,7 +123,7 @@ set $ws6 "6"
 set $ws7 "7"
 set $ws8 "8"
 set $ws9 "9"
-set $ws10 "10:"
+set $ws10 "10: "
 
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
@@ -153,7 +156,7 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
-# user Flameshot to take screenshots 
+# use Flameshot to take screenshots 
 bindsym $mod+Print exec --no-startup-id flameshot gui
 
 # resize window (you can also use the mouse for that)
@@ -164,10 +167,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym h resize shrink width 10 px or 10 ppt
-        bindsym j resize grow height 10 px or 10 ppt
-        bindsym k resize shrink height 10 px or 10 ppt
-        bindsym l resize grow width 10 px or 10 ppt
+        #bindsym h resize shrink width 10 px or 10 ppt
+        #bindsym j resize grow height 10 px or 10 ppt
+        #bindsym k resize shrink height 10 px or 10 ppt
+        #bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -187,7 +190,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
     position top
-    font pango:DejaVu Sans bold 10
+    font pango:FontAwesome bold 10
     status_command i3blocks
 	#status_command i3status
 

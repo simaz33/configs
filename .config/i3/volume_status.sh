@@ -3,7 +3,7 @@
 
 muted=$(pacmd list-sinks | grep -A 11 \* | tail -1 | cut -d ' ' -f 2)
 volume=''
-max_vol=$(cat ~/.config/i3/inc_vol.sh | grep -i max_vol | head -n 1 | cut -d '=' -f 2)
+max_vol=$(cat $HOME/.config/i3/inc_vol.sh | grep -i max_vol | head -n 1 | cut -d '=' -f 2)
 volume_symbol=''
 color=''
 image=''
@@ -34,11 +34,4 @@ else
     color=\#FFFFFF	
 fi	
 
-# Full text
-echo -e "$volume_symbol $volume"
-
-# Short text
-echo
-
-# Color
-echo $color
+dunstify -u low -t 1100 -I $image -r 5000 "$volume/$max_vol" 

@@ -19,8 +19,9 @@ color=""
 # Check if city exist
 [ $(echo "$response" | tail -6 | grep unable) ] && echo "$city not found" && echo && echo \#797979 && exit
 
-temp_nrs=$(echo $temp | cut -d ' ' -f 1)
-avg_temp=$((($(echo $temp_nrs | cut -d '.' -f 1) + $(echo $temp_nrs | cut -d '.' -f 3)) / 2))
+current_temp=$(echo $temp | cut -d ' ' -f 1 | cut -d '(' -f 1)
+night_temp=$(echo $temp | cut -d ' ' -f 1 | cut -d '(' -f 2 | cut -d ')' -f 1)
+avg_temp=$((($current_temp + $night_temp) / 2))
 
 case $avg_temp in
     3[5-9])
