@@ -6,7 +6,6 @@ set tabstop=4 softtabstop=4
 set shiftwidth=4
 set expandtab
 set smartindent
-set nowrap
 set smartcase
 set noswapfile
 set nobackup
@@ -15,7 +14,6 @@ set undofile
 set incsearch
 
 colorscheme molokai
-set background=dark
 
 let g:molokai_original = 1
 

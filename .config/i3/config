@@ -42,7 +42,7 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks && $HOME/.config/i3/volume_status.sh
 
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle; exec --no-startup-id pkill -SIGRTIM+10 i3blocks && $HOME/.config/i3/volume_status.sh
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle; exec --no-startup-id pkill -SIGRTMIN+10 i3blocks && $HOME/.config/i3/volume_status.sh
 
 # Screen brightness control using xbacklight
 bindsym XF86MonBrightnessUp exec xbacklight -inc 5 && $HOME/.config/i3/brightness_status.sh
@@ -226,5 +226,5 @@ exec --no-startup-id syndaemon -i 0.5 -t -K -R
 # Switch between keyboard layouts [us, lt]
 exec --no-startup-id setxkbmap -layout us,lt -option grp:alt_shift_toggle
 
-# Set background a static colot
+# Set background a static color
 exec --no-startup-id xsetroot -solid "#000000"
