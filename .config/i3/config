@@ -206,7 +206,7 @@ for_window [title="htop"] move window to workspace $ws10
 
 # Dual monitor settings
 # Set resolution of second monitor and move it to the right of main screen
-exec --no-startup-id xrandr --output DP2 --mode 1920x1080 --rate 60 --left-of eDP1
+exec --no-startup-id ~/.screenlayout/default.sh
 
 # Mode for moving workspaces around
 mode "move_workspace" {
