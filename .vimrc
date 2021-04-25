@@ -4,6 +4,9 @@ call plug#begin()
 
 Plug 'sheerun/vim-polyglot'
 Plug 'pineapplegiant/spaceduck', { 'branch': 'main' }
+Plug 'git@github.com:kien/ctrlp.vim.git'
+Plug 'git@github.com:Valloric/YouCompleteMe.git'
+Plug 'mbbill/undotree'
 
 call plug#end()
 
@@ -54,3 +57,5 @@ if exists('+termguicolors')
 endif
 
 colorscheme spaceduck
+
+let g:ycm_global_ycm_extra_conf = '/home/funy/.vim/.ycm_extra_conf.py'
