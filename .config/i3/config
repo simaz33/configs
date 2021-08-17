@@ -212,6 +212,8 @@ exec --no-startup-id ~/.screenlayout/default.sh
 mode "move_workspace" {
 	bindsym Left move workspace to output left
 	bindsym Right move workspace to output right
+	bindsym Up move workspace to output up
+	bindsym Down move workspace to output down
 	
 	bindsym Escape mode "default"
 }
