@@ -134,23 +134,18 @@ echo "Installing GRUB"
 grub-install --boot-directory=/boot --efi-directory=/boot/efi $boot_partition
 grub-mkconfig -o /boot/grub/grub.cfg
 grub-mkconfig -o /boot/efi/EFI/arch/grub.cfg
-
 END
+
+echo "Base installation finished, proceeding with customizations"
 
 #Adding another admin user and customizations
 username=funy
-arch-chroot /mnt /bin/bash << END
 echo "Adding admin user $username and setting password:"
 
-useradd -m $username && passwd $username
+arch-chroot /mnt useradd -m $username && passwd $username
+
+arch-chroot /mnt /bin/bash << END
 sed -i "s/root ALL=(ALL) ALL/root ALL=(ALL) ALL\n$username ALL=(ALL) ALL/g" /etc/sudoers
-
-#Clone config repo
-cd /home/$username 
-
-git clone https://github.com/simaz33/configs
-
-mv configs/.* .
 
 echo "Installing vim plugin manager"
 curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
@@ -158,7 +153,11 @@ curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
 
 
 #Enabling services 
+echo "Enabling NetworkManager"
 systemctl enable NetworkManager
+
+echo "Enabling sddm"
+systemctl enable sddm
 
 END
 
