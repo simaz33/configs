@@ -142,10 +142,11 @@ echo "Base installation finished, proceeding with customizations"
 username=funy
 echo "Adding admin user $username and setting password:"
 
-arch-chroot /mnt useradd -m $username && passwd $username
+arch-chroot /mnt useradd -m $username
+arch-chroot /mnt passwd $username
 
 echo "Moving pkg.list inside chroot"
-mv $HOME/configs/pkg.list /mnt/home/$username/
+cp $HOME/configs/pkg.list /mnt/home/$username/
 
 echo "Adding customizations"
 arch-chroot /mnt /bin/bash << END
@@ -157,7 +158,14 @@ pacman -S --needed --noconfirm - < /home/$username/pkg.list
 END
 
 echo "Moving dotfiles"
-mv $HOME/configs/.* /mnt/home/$username/
+mv $HOME/configs/dotfiles/.* /mnt/home/$username/
+
+echo "Moving configuration files in .config"
+arch-chroot /mnt /bin/bash << END
+[ -d /home/$username/.config ] || mkdir /home/$username/.config
+END
+
+mv $HOME/configs/config/* /mnt/home/$username/.config
 
 echo "Extra customizations"
 arch-chroot /mnt /bin/bash << END
@@ -174,6 +182,9 @@ systemctl enable NetworkManager
 echo "Enabling sddm"
 systemctl enable sddm
 END
+
+echo "Give permission to /home/$username to $username"
+arch-chroot /mnt chown -R $username:$username /home/$username
 
 echo "Installation finished"
 echo "Rebooting.."
