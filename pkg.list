@@ -40,7 +40,7 @@ sed
 simplescreenrecorder 
 smbclient 
 sudo 
-terminator 
+alacritty
 texinfo 
 texlive-bibtexextra 
 texlive-bin 
