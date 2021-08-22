@@ -1,0 +1,167 @@
+#!/bin/bash
+
+# Check if there is internet connection by pinging google.com 
+# and checking if there are any received packets
+echo "Checking if internet is available" 
+
+rcvd_packets=$(ping -c 3 google.com | grep packet | cut -d ' ' -f 4)
+
+if [ $rcvd_packets -eq 0 ]
+then
+    echo "ERROR: No internet connection. Exiting script."
+    exit
+fi
+
+# Install "jq" tool
+echo "Installing jq" 
+
+pacman -Sy && pacman -S jq --noconfirm
+
+# Patition the disk manually with cfdisk since there might be 
+# risk overwriting existing partitions. TODO: Automate this step
+
+cfdisk /dev/sda
+
+echo "Enter EFI partition:"
+read efi_partition
+echo "Enter boot partition:"
+read boot_partition
+echo "Enter root partition:"
+read root_partition
+
+#Configure LUKS Encryption on the Disk
+echo "Encrypt and mount partitions? (Y/N):"
+while [ true ]
+do
+    read choice
+    case $choice in
+        Y|y|N|n)
+	    break
+	    ;;
+	*)
+	    echo "Error: Please enter Y/y or N/n"
+	    ;;
+    esac
+done
+
+if [[ $choice =~ [Yy] ]]
+then
+	echo "Loading kernel modules"
+	modprobe dm-crypt
+	modprobe dm-mod
+
+	echo "Encrypting root partition"
+
+	cryptsetup luksFormat -v -s 512 -h sha512 $root_partition 
+	echo "Opening the encrypted partition" 
+	cryptsetup open $root_partition luks_root 
+
+	#Foramtting and Mounting the Partitions
+	echo "Formatting the EFI System Partition"
+	mkfs.vfat -n "EFI" $efi_partition
+
+	echo "Formatting the boot Partition"
+	mkfs.ext4 -L boot $boot_partition
+
+	echo "Formatting the root Partition"
+	mkfs.ext4 -L root /dev/mapper/luks_root
+
+	echo "Mounting the root partition"
+	mount /dev/mapper/luks_root /mnt
+	cd /mnt
+	mkdir boot
+
+	echo "Mounting the boot partition"
+	mount $boot_partition boot
+
+	echo "Mounting the efi partition"
+	mkdir boot/efi
+	mount $efi_partition boot/efi
+
+	echo "Creating swap"
+	dd if=/dev/zero of=swap bs=1M count=1024
+	mkswap swap
+	swapon swap
+
+	echo "Changing swap file permissions to 0600"
+	chmod 0600 swap
+fi
+
+#Installing Arch Linux
+pacstrap /mnt base base-devel efibootmgr grub networkmanager linux linux-firmware 
+
+genfstab -U /mnt > /mnt/etc/fstab
+
+echo "Set password for root: "
+arch-chroot /mnt passwd root
+echo "Password for root was set"
+
+arch-chroot /mnt /bin/bash << END
+
+locale="en_US.UTF-8 UTF-8"
+echo "Selecting locale - \$locale" 
+echo "Executing sed -i 's/#\$locale/\$locale/g' /etc/locale.gen"
+sed -i "s/#\$locale/\$locale/g" /etc/locale.gen
+locale-gen
+
+lang="en_US.UTF-8"
+echo LANG=\$lang > /etc/locale.conf
+export LANG=\$lang
+
+echo "Setting time zone"
+ln -sf /usr/share/zoneinfo/Europe/Vilnius /etc/localtime
+
+echo "Setting hardware clock"
+hwclock --systohc --utc
+
+echo "Setting hostname"
+echo funy > /etc/hostname
+
+cat << EOF >> /etc/hosts 
+127.0.0.1    localhost funy
+::1          localhost funy
+EOF
+
+echo "Editing grub config to use encrypted partition"
+sed -i "s|GRUB_CMDLINE_LINUX=\"\"|GRUB_CMDLINE_LINUX=\"cryptdevice=$root_partition:luks_root\"|g" /etc/default/grub
+echo "GRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub
+
+echo "Editing hooks"
+sed -i 's/block/block encrypt/g' /etc/mkinitcpio.conf
+mkinitcpio -p linux
+
+echo "Installing GRUB"
+grub-install --boot-directory=/boot --efi-directory=/boot/efi $boot_partition
+grub-mkconfig -o /boot/grub/grub.cfg
+grub-mkconfig -o /boot/efi/EFI/arch/grub.cfg
+
+END
+
+#Adding another admin user and customizations
+username=funy
+arch-chroot /mnt /bin/bash << END
+echo "Adding admin user $username and setting password:"
+
+useradd -m $username && passwd $username
+sed -i "s/root ALL=(ALL) ALL/root ALL=(ALL) ALL\n$username ALL=(ALL) ALL/g" /etc/sudoers
+
+#Clone config repo
+cd /home/$username 
+
+git clone https://github.com/simaz33/configs
+
+mv configs/.* .
+
+echo "Installing vim plugin manager"
+curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
+     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+
+#Enabling services 
+systemctl enable NetworkManager
+
+END
+
+echo "Installation finished"
+echo "Rebooting.."
+reboot
