@@ -35,12 +35,12 @@ while [ true ]
 do
     read choice
     case $choice in
-        Y|y|N|n)
-	    break
-	    ;;
-	*)
-	    echo "Error: Please enter Y/y or N/n"
-	    ;;
+				Y|y|N|n)
+					break
+					;;
+				*)
+					echo "Error: Please enter Y/y or N/n:"
+					;;
     esac
 done
 
@@ -144,21 +144,35 @@ echo "Adding admin user $username and setting password:"
 
 arch-chroot /mnt useradd -m $username && passwd $username
 
+echo "Moving pkg.list inside chroot"
+mv $HOME/configs/pkg.list /mnt/home/$username/
+
+echo "Adding customizations"
 arch-chroot /mnt /bin/bash << END
+echo "Adding $username to sudoers"
 sed -i "s/root ALL=(ALL) ALL/root ALL=(ALL) ALL\n$username ALL=(ALL) ALL/g" /etc/sudoers
 
+echo "Installing custom packages"
+pacman -S --needed --noconfirm - < /home/$username/pkg.list 
+END
+
+echo "Moving dotfiles"
+mv $HOME/configs/.* /mnt/home/$username/
+
+echo "Extra customizations"
+arch-chroot /mnt /bin/bash << END
 echo "Installing vim plugin manager"
 curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+END
 
-
-#Enabling services 
+echo "Enabling services"
+arch-chroot /mnt /bin/bash << END
 echo "Enabling NetworkManager"
 systemctl enable NetworkManager
 
 echo "Enabling sddm"
 systemctl enable sddm
-
 END
 
 echo "Installation finished"
