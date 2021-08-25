@@ -30,11 +30,13 @@ networkmanager
 openssh
 pavucontrol
 pcmanfm
+picom
 pulseaudio
 pulseaudio-bluetooth
 pulseaudio-qt
 qbittorrent
 remmina
+rofi
 sddm
 sed
 simplescreenrecorder

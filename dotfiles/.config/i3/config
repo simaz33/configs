@@ -195,14 +195,17 @@ bindsym $mod+r mode "resize"
 #    #status_command i3status
 #}
 
+# Launch polybar
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+
 # Assign applications to specific workspaces and autostart applications
-exec --no-startup-id "/usr/bin/alacritty && sleep 1"
+exec --no-startup-id "/usr/bin/alacritty"
 
 exec --no-startup-id /usr/bin/firefox
-for_window [title="(?i)firefox"] move window to workspace $ws2
+for_window [class="(?i)firefox"] move to workspace $ws2
 
-exec --no-startup-id "/usr/bin/terminator --title=htop -x htop && sleep 1"
-for_window [title="htop"] move window to workspace $ws10
+exec --no-startup-id "/usr/bin/alacritty --title htop -e htop"
+for_window [title="htop"] move to workspace $ws10
 
 # Dual monitor settings
 # Set resolution of second monitor and move it to the right of main screen
@@ -228,3 +231,6 @@ exec --no-startup-id setxkbmap -layout us,lt -option grp:alt_shift_toggle
 
 # Set background a static color
 exec --no-startup-id xsetroot -solid "#000000"
+
+# Window compositor
+exec_always picom -f
