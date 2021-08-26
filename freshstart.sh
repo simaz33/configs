@@ -1,5 +1,49 @@
 #!/bin/bash -x
 
+username=funy
+# Helping functions
+install_polybar_aur () {
+arch-chroot /mnt /bin/bash -x << END
+git clone https://aur.archlinux.org/polybar.git
+chown -R $username:$username polybar
+su funy
+cd polybar
+makepkg -s -i --noconfirm
+cd ..
+exit
+
+git clone https://aur.archlinux.org/ttf-unifont.git
+chown -R $username:$username ttf-unifont
+su funy
+cd ttf-unifont
+makepkg -s -i --noconfirm
+cd ..
+exit
+
+git clone https://aur.archlinux.org/siji-git.git
+chown -R $username:$username siji-git
+su funy
+cd siji-git
+makepkg -s -i --noconfirm
+cd ..
+exit
+END
+}
+
+install_YouCompleteMe () {
+arch-chroot /mnt /bin/bash -x << END
+git clone https://github.com/ycm-core/YouCompleteMe.git
+cd YouCompleteMe 
+python3 install.py --all
+END
+}
+
+install_vim_plug () {
+arch-chroot /mnt /bin/bash -x << END
+curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
+     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+END
+}
 # Check if there is internet connection by pinging google.com 
 # and checking if there are any received packets
 echo "Checking if internet is available" 
@@ -139,7 +183,6 @@ END
 echo "Base installation finished, proceeding with customizations"
 
 #Adding another admin user and customizations
-username=funy
 echo "Adding admin user $username and setting password:"
 
 arch-chroot /mnt useradd -m $username
@@ -189,37 +232,3 @@ echo "Installation finished"
 echo "Rebooting.."
 reboot
 
-# Helping functions
-install_polybar_aur () {
-arch-chroot /mnt /bin/bash -x << END
-git clone https://aur.archlinux.org/polybar.git
-cd polybar
-makepkg -s -i --noconfirm
-cd ..
-
-git clone https://aur.archlinux.org/ttf-unifont.git
-cd ttf-unifont
-makepkg -s -i --noconfirm
-cd ..
-
-git clone https://aur.archlinux.org/siji-git.git
-cd siji-git
-makepkg -s -i --noconfirm
-cd ..
-END
-}
-
-install_YouCompleteMe () {
-arch-chroot /mnt /bin/bash -x << END
-git clone https://github.com/ycm-core/YouCompleteMe.git
-cd YouCompleteMe 
-python3 install.py --all
-END
-}
-
-install_vim_plug () {
-arch-chroot /mnt /bin/bash -x << END
-curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
-     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-END
-}
