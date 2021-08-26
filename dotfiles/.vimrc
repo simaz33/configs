@@ -4,8 +4,8 @@ call plug#begin()
 
 Plug 'sheerun/vim-polyglot'
 Plug 'pineapplegiant/spaceduck', { 'branch': 'main' }
-Plug 'git@github.com:kien/ctrlp.vim.git'
-Plug 'git@github.com:Valloric/YouCompleteMe.git'
+Plug 'kien/ctrlp.vim'
+Plug 'Valloric/YouCompleteMe'
 Plug 'mbbill/undotree'
 
 call plug#end()

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # Check if there is internet connection by pinging google.com 
 # and checking if there are any received packets
@@ -96,7 +96,7 @@ echo "Set password for root: "
 arch-chroot /mnt passwd root
 echo "Password for root was set"
 
-arch-chroot /mnt /bin/bash << END
+arch-chroot /mnt /bin/bash -x << END
 
 locale="en_US.UTF-8 UTF-8"
 echo "Selecting locale - \$locale" 
@@ -149,33 +149,32 @@ echo "Moving pkg.list inside chroot"
 cp $HOME/configs/pkg.list /mnt/home/$username/
 
 echo "Adding customizations"
-arch-chroot /mnt /bin/bash << END
+arch-chroot /mnt /bin/bash -x << END
 echo "Adding $username to sudoers"
 sed -i "s/root ALL=(ALL) ALL/root ALL=(ALL) ALL\n$username ALL=(ALL) ALL/g" /etc/sudoers
 
-echo "Installing custom packages"
+echo "Installing packages"
 pacman -S --needed --noconfirm - < /home/$username/pkg.list 
 END
+
+echo "Installing custom packages"
+install_polybar_aur
+install_YouCompleteMe
+install_vim_plug
 
 echo "Moving dotfiles"
 mv $HOME/configs/dotfiles/.* /mnt/home/$username/
 
 echo "Moving configuration files in .config"
-arch-chroot /mnt /bin/bash << END
+arch-chroot /mnt /bin/bash -x << END
 [ -d /home/$username/.config ] || mkdir /home/$username/.config
 END
 
 mv $HOME/configs/config/* /mnt/home/$username/.config
 
-echo "Extra customizations"
-arch-chroot /mnt /bin/bash << END
-echo "Installing vim plugin manager"
-curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
-     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-END
 
 echo "Enabling services"
-arch-chroot /mnt /bin/bash << END
+arch-chroot /mnt /bin/bash -x << END
 echo "Enabling NetworkManager"
 systemctl enable NetworkManager
 
@@ -189,3 +188,38 @@ arch-chroot /mnt chown -R $username:$username /home/$username
 echo "Installation finished"
 echo "Rebooting.."
 reboot
+
+# Helping functions
+install_polybar_aur () {
+arch-chroot /mnt /bin/bash -x << END
+git clone https://aur.archlinux.org/polybar.git
+cd polybar
+makepkg -s -i --noconfirm
+cd ..
+
+git clone https://aur.archlinux.org/ttf-unifont.git
+cd ttf-unifont
+makepkg -s -i --noconfirm
+cd ..
+
+git clone https://aur.archlinux.org/siji-git.git
+cd siji-git
+makepkg -s -i --noconfirm
+cd ..
+END
+}
+
+install_YouCompleteMe () {
+arch-chroot /mnt /bin/bash -x << END
+git clone https://github.com/ycm-core/YouCompleteMe.git
+cd YouCompleteMe 
+python3 install.py --all
+END
+}
+
+install_vim_plug () {
+arch-chroot /mnt /bin/bash -x << END
+curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
+     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+END
+}
