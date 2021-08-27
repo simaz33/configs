@@ -13,6 +13,7 @@ efibootmgr
 firefox
 freerdp
 git
+go
 grub
 gzip
 htop
@@ -20,13 +21,17 @@ i3-gaps
 i3status
 imagemagick
 inotify-tools
+jdk-openjdk
 libtool
 linux
 linux-firmware
 linux-headers
 make
+mono
 neofetch
 networkmanager
+nodejs
+npm
 openssh
 pavucontrol
 pcmanfm
