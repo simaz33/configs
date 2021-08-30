@@ -1,6 +1,7 @@
 #!/bin/bash -x
 
 username=funy
+
 # Helping functions
 install_polybar_aur () {
 arch-chroot /mnt /bin/bash -x << END
@@ -32,9 +33,11 @@ END
 
 install_YouCompleteMe () {
 arch-chroot /mnt /bin/bash -x << END
+su funy
 git clone https://github.com/ycm-core/YouCompleteMe.git
 cd YouCompleteMe 
 python3 install.py --all
+exit
 END
 }
 

@@ -200,10 +200,10 @@ bindsym $mod+r mode "resize"
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # Disable window titlebars for gaps
-for_window [class=".*"] border pixel 0
-smart_gaps on
-smart_borders on
-hide_edge_borders smart_no_gaps
+for_window [class=".*"] border pixel 1
+gaps inner 10
+gaps outer 5
+
 # Assign applications to specific workspaces and autostart applications
 exec --no-startup-id "/usr/bin/alacritty"
 
