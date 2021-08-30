@@ -31,16 +31,6 @@ exit
 END
 }
 
-install_YouCompleteMe () {
-arch-chroot /mnt /bin/bash -x << END
-su funy
-git clone https://github.com/ycm-core/YouCompleteMe.git
-cd YouCompleteMe 
-python3 install.py --all
-exit
-END
-}
-
 install_vim_plug () {
 arch-chroot /mnt /bin/bash -x << END
 curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
@@ -205,7 +195,6 @@ END
 
 echo "Installing custom packages"
 install_polybar_aur
-install_YouCompleteMe
 install_vim_plug
 
 echo "Moving dotfiles"
