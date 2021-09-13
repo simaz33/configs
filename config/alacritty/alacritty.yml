@@ -26,3 +26,9 @@ colors:
     magenta: '#f2ce00'
     cyan:    '#7a5ccc'
     white:   '#f0f1ce'
+
+font:
+  normal:
+    family: Ubuntu Mono
+
+  size: 15
