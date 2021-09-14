@@ -144,8 +144,6 @@ get_choice() {
                 ;;
         esac
     done
-
-    return $choice
 }
 
 #Installing Arch Linux
@@ -260,7 +258,7 @@ change_permissions() {
 
 check_net_availability
 partition_disk
-choice=get_choice
+get_choice
 [[ $choice =~ [Yy] ]] && encrypt_partitions && format_partitions && mount_partitions && create_swap
 install_base
 add_admin_user
@@ -270,6 +268,6 @@ move_dotfiles
 enable_services
 change_permissions
 
-echo "Installation finished"
-echo "Rebooting.."
-reboot
+#echo "Installation finished"
+#echo "Rebooting.."
+#reboot
