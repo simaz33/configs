@@ -93,8 +93,8 @@ encrypt_partitions() {
 
 #Foramtting partitions
 format_partitions() {
-	echo "Formatting the EFI System Partition"
-	mkfs.vfat -n "EFI" $efi_partition
+	#echo "Formatting the EFI System Partition"
+	#mkfs.vfat -n "EFI" $efi_partition
 
 	echo "Formatting the boot Partition"
 	mkfs.ext4 -L boot $boot_partition
