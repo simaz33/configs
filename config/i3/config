@@ -199,6 +199,9 @@ bindsym $mod+r mode "resize"
 # Launches polybar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
+# Dual monitor settings
+exec --no-startup-id ~/.screenlayout/default.sh
+
 # Disable window titlebars for gaps
 for_window [class=".*"] border pixel 1
 gaps inner 10
@@ -206,16 +209,19 @@ gaps outer 5
 
 # Assign applications to specific workspaces and autostart applications
 exec --no-startup-id "/usr/bin/alacritty"
+for_window [class="(?i)alacritty"] move to workspace $ws1
+exec --no-startup-id i3-msg '[workspace=$ws1]' move workspace to output right
 
 exec --no-startup-id /usr/bin/firefox
 for_window [class="(?i)firefox"] move to workspace $ws2
 
 exec --no-startup-id "/usr/bin/alacritty --title htop -e htop"
 for_window [title="htop"] move to workspace $ws10
+exec --no-startup-id i3-msg '[workspace=$ws10]' move workspace to output right
 
-# Dual monitor settings
-# Set resolution of second monitor and move it to the right of main screen
-exec --no-startup-id ~/.screenlayout/default.sh
+exec --no-startup-id "/usr/bin/slack"
+for_window [class="(?i)slack"] move to workspace $ws3
+exec --no-startup-id i3-msg '[workspace=$ws3]' move workspace to output right
 
 # Mode for moving workspaces around
 mode "move_workspace" {
@@ -230,7 +236,7 @@ mode "move_workspace" {
 bindsym $mod+o mode "move_workspace"
 
 # Make touchpad inactive for 0.5 secs while typing
-exec --no-startup-id syndaemon -i 0.5 -t -K -R
+#exec --no-startup-id syndaemon -i 0.5 -t -K -R
 
 # Switch between keyboard layouts [us, lt]
 exec --no-startup-id setxkbmap -layout us,lt -option grp:alt_shift_toggle

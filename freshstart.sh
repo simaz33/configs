@@ -8,7 +8,7 @@ install_polybar_aur () {
     arch-chroot /mnt /bin/bash -x << END
 git clone https://aur.archlinux.org/polybar.git
 chown -R $username:$username polybar
-su funy
+su $username
 cd polybar
 makepkg -s -i --noconfirm
 cd ..
@@ -16,7 +16,7 @@ exit
 
 git clone https://aur.archlinux.org/ttf-unifont.git
 chown -R $username:$username ttf-unifont
-su funy
+su $username
 cd ttf-unifont
 makepkg -s -i --noconfirm
 cd ..
@@ -24,7 +24,7 @@ exit
 
 git clone https://aur.archlinux.org/siji-git.git
 chown -R $username:$username siji-git
-su funy
+su $username
 cd siji-git
 makepkg -s -i --noconfirm
 cd ..
@@ -152,7 +152,7 @@ install_base() {
 
     genfstab -U /mnt > /mnt/etc/fstab
 
-    echo "Set password for root: "
+    echo "Set password for root..."
     arch-chroot /mnt passwd root
     echo "Password for root was set"
 
@@ -201,7 +201,7 @@ END
 
 #Adding another admin user 
 add_admin_user() {
-    echo "Adding admin user $username and setting password:"
+    echo "Adding admin user $username and setting password..."
 
     arch-chroot /mnt useradd -m $username
     arch-chroot /mnt passwd $username
@@ -268,6 +268,6 @@ move_dotfiles
 enable_services
 change_permissions
 
-#echo "Installation finished"
+echo "Installation finished"
 #echo "Rebooting.."
 #reboot
