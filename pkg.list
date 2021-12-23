@@ -4,6 +4,7 @@ biber
 binutils
 bluez
 bluez-utils
+blueman
 cmake
 cronie
 discord
