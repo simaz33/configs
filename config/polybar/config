@@ -199,7 +199,7 @@ wrapping-scroll = false
 ;pin-workspaces = true
 
 ws-icon-0 = 1;
-ws-icon-1 = 2;
+ws-icon-1 = 2;
 ws-icon-2 = 3;
 ws-icon-3 = 4;
 ws-icon-4 = 5;
@@ -334,10 +334,10 @@ type = internal/date
 interval = 1.0
 
 date = " %a, %Y-%m-%d"
-date-alt =
+date-alt = " %a, %Y-%m-%d"
 
 time = %H:%M
-time-alt = 
+time-alt = %H:%M:%S
 
 format-prefix = 
 format-prefix-foreground = #b3a1e6
