@@ -1,57 +1,66 @@
 #!/bin/bash 
 
-username=funy
-hostname=funy
+boot_partition=$1
+efi_partition=$2
+root_partition=$3
+username=$4
+hostname=$5
+$password=$6
+$root_password=$7
 
-# Helping functions
-install_polybar_aur () {
-    arch-chroot /mnt /bin/bash -x << END
-git clone https://aur.archlinux.org/polybar.git
-chown -R $username:$username polybar
-su $username
-cd polybar
-makepkg -s -i --noconfirm
-cd ..
-exit
-
-git clone https://aur.archlinux.org/ttf-unifont.git
-chown -R $username:$username ttf-unifont
-su $username
-cd ttf-unifont
-makepkg -s -i --noconfirm
-cd ..
-exit
-
-git clone https://aur.archlinux.org/siji-git.git
-chown -R $username:$username siji-git
-su $username
-cd siji-git
-makepkg -s -i --noconfirm
-cd ..
-exit
-END
-}
-
-install_i3lock_color_aur() {
-    arch-chroot /mnt /bin/bash -x << END
-git clone https://aur.archlinux.org/i3lock-color.git
-chown -R $username:$username i3lock-color
-su funy
-cd i3lock-color
-makepkg -s -i --noconfirm
-cd ..
-exit
-END
-}
-
-install_vim_plug () {
-arch-chroot /mnt /bin/bash -x << END
-curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
-     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-END
-}
+## Helping functions
+#install_polybar_aur () {
+#    arch-chroot /mnt /bin/bash -x << END
+#git clone https://aur.archlinux.org/polybar.git
+#chown -R $username:$username polybar
+#su $username
+#cd polybar
+#makepkg -s -i --noconfirm
+#cd ..
+#exit
+#
+#git clone https://aur.archlinux.org/ttf-unifont.git
+#chown -R $username:$username ttf-unifont
+#su $username
+#cd ttf-unifont
+#makepkg -s -i --noconfirm
+#cd ..
+#exit
+#
+#git clone https://aur.archlinux.org/siji-git.git
+#chown -R $username:$username siji-git
+#su $username
+#cd siji-git
+#makepkg -s -i --noconfirm
+#cd ..
+#exit
+#END
+#}
+#
+#install_i3lock_color_aur() {
+#    arch-chroot /mnt /bin/bash -x << END
+#git clone https://aur.archlinux.org/i3lock-color.git
+#chown -R $username:$username i3lock-color
+#su $username
+#cd i3lock-color
+#makepkg -s -i --noconfirm
+#cd ..
+#exit
+#END
+#}
+#
+#install_vim_plug () {
+#arch-chroot /mnt /bin/bash -x << END
+#curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
+#     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+#END
+#}
 # Check if there is internet connection by pinging google.com 
 # and checking if there are any received packets
+function error () {
+    echo "ERROR: $1" 1>&2
+}
+
 check_net_availability() {
     echo "Checking if internet is available" 
 
@@ -59,7 +68,7 @@ check_net_availability() {
 
     if [ $rcvd_packets -eq 0 ]
     then
-        echo "ERROR: No internet connection. Exiting script."
+        error "No internet connection. Exiting script."
         exit
     fi
 }
@@ -67,16 +76,16 @@ check_net_availability() {
 # Patition the disk manually with cfdisk since there might be 
 # risk overwriting existing partitions. TODO: Automate this step
 
-partition_disk() {
-    cfdisk $1
-
-    echo "Enter EFI partition:"
-    read efi_partition
-    echo "Enter boot partition:"
-    read boot_partition
-    echo "Enter root partition:"
-    read root_partition
-}
+#partition_disk() {
+#    cfdisk $1
+#
+#    echo "Enter EFI partition:"
+#    read efi_partition
+#    echo "Enter boot partition:"
+#    read boot_partition
+#    echo "Enter root partition:"
+#    read root_partition
+#}
 
 #Configure LUKS Encryption on the Disk
 encrypt_partitions() {
@@ -130,21 +139,21 @@ create_swap() {
 }
 
 #Get choice if formatting, encrypting, mounting and creating swap is needed
-get_choice() {
-    echo "Encrypt and mount partitions? (Y/N):"
-    while [ true ]
-    do
-        read choice
-        case $choice in
-            Y|y|N|n)
-                break
-                ;;
-            *)
-                echo "Error: Please enter Y/y or N/n:"
-                ;;
-        esac
-    done
-}
+#get_choice() {
+#    echo "Encrypt and mount partitions? (Y/N):"
+#    while [ true ]
+#    do
+#        read choice
+#        case $choice in
+#            Y|y|N|n)
+#                break
+#                ;;
+#            *)
+#                echo "Error: Please enter Y/y or N/n:"
+#                ;;
+#        esac
+#    done
+#}
 
 #Installing Arch Linux
 install_base() {
@@ -257,9 +266,10 @@ change_permissions() {
 }
 
 check_net_availability
-partition_disk
-get_choice
-[[ $choice =~ [Yy] ]] && encrypt_partitions && format_partitions && mount_partitions && create_swap
+#partition_disk $1
+#get_choice
+#[[ $choice =~ [Yy] ]] && encrypt_partitions && format_partitions && mount_partitions && create_swap
+encrypt_partitions && format_partitions && mount_partitions && create_swap
 install_base
 add_admin_user
 install_customizations
@@ -269,5 +279,5 @@ enable_services
 change_permissions
 
 echo "Installation finished"
-#echo "Rebooting.."
-#reboot
+echo "Rebooting.."
+reboot
