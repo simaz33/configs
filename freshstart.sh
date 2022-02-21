@@ -99,5 +99,5 @@ then
     [ ! "$PASSWORD" ] && error "Password for admin user was not specified"
 
     echo "Installing base arch linux"
-    #./base_install.sh $BOOT_PARTITION $EFI_PARTITION $ROOT_PARTITION $USERNAME $HOSTNAME $PASSWORD $ROOT_PASSWORD 
+    #./base_install.sh $BOOT_PARTITION $EFI_PARTITION $ROOT_PARTITION $USERNAME $HOSTNAME $PASSWORD $ROOT_PASSWORD $DUAL_BOOT
 fi

@@ -7,6 +7,7 @@ username=$4
 hostname=$5
 $password=$6
 $root_password=$7
+$dual_boot=$8
 
 ## Helping functions
 #install_polybar_aur () {
@@ -87,7 +88,6 @@ check_net_availability() {
 #    read root_partition
 #}
 
-#Configure LUKS Encryption on the Disk
 encrypt_partitions() {
     echo "Loading kernel modules"
     modprobe dm-crypt
@@ -100,10 +100,12 @@ encrypt_partitions() {
     cryptsetup open $root_partition luks_root 
 }
 
-#Foramtting partitions
 format_partitions() {
-	#echo "Formatting the EFI System Partition"
-	#mkfs.vfat -n "EFI" $efi_partition
+    if [ ! "$1" ]
+    then
+        echo "Formatting the EFI System Partition"
+        mkfs.vfat -n "EFI" $efi_partition
+    fi
 
 	echo "Formatting the boot Partition"
 	mkfs.ext4 -L boot $boot_partition
@@ -112,7 +114,6 @@ format_partitions() {
 	mkfs.ext4 -L root /dev/mapper/luks_root
 }
 
-#Mounting partitions
 mount_partitions() {
 	echo "Mounting the root partition"
 	mount /dev/mapper/luks_root /mnt
@@ -127,7 +128,6 @@ mount_partitions() {
 	mount $efi_partition boot/efi
 }
 
-#Create swap
 create_swap() {
 	echo "Creating swap"
 	dd if=/dev/zero of=swap bs=1M count=1024
@@ -155,7 +155,6 @@ create_swap() {
 #    done
 #}
 
-#Installing Arch Linux
 install_base() {
     pacstrap /mnt base base-devel efibootmgr grub networkmanager linux linux-firmware 
 
@@ -208,7 +207,6 @@ END
     echo "Base installation finished, proceeding with customizations"
 }
 
-#Adding another admin user 
 add_admin_user() {
     echo "Adding admin user $username and setting password..."
 
@@ -219,34 +217,34 @@ add_admin_user() {
     cp $HOME/configs/pkg.list /mnt/home/$username/
 }
 
-install_customizations() {
-    echo "Adding customizations"
-    arch-chroot /mnt /bin/bash -x << END
-echo "Adding $username to sudoers"
-sed -i "s/root ALL=(ALL) ALL/root ALL=(ALL) ALL\n$username ALL=(ALL) ALL/g" /etc/sudoers
+#install_customizations() {
+#    echo "Adding customizations"
+#    arch-chroot /mnt /bin/bash -x << END
+#echo "Adding $username to sudoers"
+#sed -i "s/root ALL=(ALL) ALL/root ALL=(ALL) ALL\n$username ALL=(ALL) ALL/g" /etc/sudoers
+#
+#echo "Installing packages"
+#pacman -S --needed --noconfirm - < /home/$username/pkg.list 
+#END
+#
+#}
 
-echo "Installing packages"
-pacman -S --needed --noconfirm - < /home/$username/pkg.list 
-END
+#install_custom_packages() {
+#    echo "Installing AUR and other custom packages"
+#    install_polybar_aur
+#    install_i3lock_color_aur
+#    install_vim_plug
+#}
 
-}
-
-install_custom_packages() {
-    echo "Installing AUR and other custom packages"
-    install_polybar_aur
-    install_i3lock_color_aur
-    install_vim_plug
-}
-
-move_dotfiles() {
-    echo "Moving dotfiles"
-    mv $HOME/configs/dotfiles/.* /mnt/home/$username/
-
-    echo "Moving configuration files in .config"
-    [ -d /mnt/home/$username/.config ] || mkdir /mnt/home/$username/.config
-
-    mv $HOME/configs/config/* /mnt/home/$username/.config
-}
+#move_dotfiles() {
+#    echo "Moving dotfiles"
+#    mv $HOME/configs/dotfiles/.* /mnt/home/$username/
+#
+#    echo "Moving configuration files in .config"
+#    [ -d /mnt/home/$username/.config ] || mkdir /mnt/home/$username/.config
+#
+#    mv $HOME/configs/config/* /mnt/home/$username/.config
+#}
 
 enable_services() {
     echo "Enabling services"
@@ -259,25 +257,21 @@ systemctl enable sddm
 END
 }
 
-#Give permissions to the main user created in earlier steps
 change_permissions() {
-    echo "Give permission to /home/$username to $username"
+    echo "Give permissions directory /home/$username to $username"
     arch-chroot /mnt chown -R $username:$username /home/$username
 }
 
 check_net_availability
-#partition_disk $1
 #get_choice
 #[[ $choice =~ [Yy] ]] && encrypt_partitions && format_partitions && mount_partitions && create_swap
-encrypt_partitions && format_partitions && mount_partitions && create_swap
+encrypt_partitions && format_partitions $dual_boot && mount_partitions && create_swap
 install_base
 add_admin_user
-install_customizations
-install_custom_packages
-move_dotfiles
+#install_customizations
+#install_custom_packages
+#move_dotfiles
 enable_services
 change_permissions
 
-echo "Installation finished"
-echo "Rebooting.."
-reboot
+echo "Base installation finished"
