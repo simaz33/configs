@@ -4,11 +4,11 @@ username=$1
 
 install_polybar_aur () {
     arch-chroot /mnt /bin/bash -x << END
-su -c 'git clone https://aur.archlinux.org/polybar.git && cd polybar && makepkg -s -i --noconfirm' -s /bin/sh $username
+su -c 'cd /home/$username && git clone https://aur.archlinux.org/polybar.git && cd polybar && makepkg -s -i --noconfirm' -s /bin/sh $username
 
-su -c 'git clone https://aur.archlinux.org/ttf-unifont.git && cd ttf-unifont && makepkg -s -i --noconfirm' -s /bin/sh $username
+su -c 'cd /home/$username && git clone https://aur.archlinux.org/ttf-unifont.git && cd ttf-unifont && makepkg -s -i --noconfirm' -s /bin/sh $username
 
-su -c 'git clone https://aur.archlinux.org/siji-git.git && cd siji-git && makepkg -s -i --noconfirm' -s /bin/sh $username
+su -c 'cd /home/$username && git clone https://aur.archlinux.org/siji-git.git && cd siji-git && makepkg -s -i --noconfirm' -s /bin/sh $username
 END
 }
 
