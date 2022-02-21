@@ -44,7 +44,7 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         -R|--rootpartition)
-            ROOT_PASSWORD="$2"
+            ROOT_PARTITION="$2"
             shift 2
             ;;
         -u|--username)
