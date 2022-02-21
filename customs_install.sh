@@ -32,7 +32,7 @@ echo "Adding $username to sudoers"
 sed -i "s/root ALL=(ALL) ALL/root ALL=(ALL) ALL\n$username ALL=(ALL) ALL/g" /etc/sudoers
 
 echo "Installing packages"
-pacman -S --needed --noconfirm - < /tmp/pkg.list 
+pacman -S --needed --noconfirm - < /mnt/tmp/pkg.list 
 END
 
 }
@@ -54,8 +54,17 @@ move_dotfiles() {
     mv $HOME/configs/config/* /mnt/home/$username/.config
 }
 
+enable_services() {
+    echo "Enabling services"
+    arch-chroot /mnt /bin/bash -x << END
+echo "Enabling sddm"
+systemctl enable sddm
+END
+}
+
 install_custom_packages
 install_aur_packages
 move_dotfiles
+enable_services
 
 echo "Customizations installed"

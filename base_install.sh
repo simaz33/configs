@@ -178,9 +178,6 @@ enable_services() {
     arch-chroot /mnt /bin/bash -x << END
 echo "Enabling NetworkManager"
 systemctl enable NetworkManager
-
-echo "Enabling sddm"
-systemctl enable sddm
 END
 }
 
