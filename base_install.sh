@@ -170,7 +170,7 @@ echo -e "$password\n$password" | passwd $username
 END
 
     echo "Moving pkg.list inside chroot"
-    cp $HOME/configs/pkg.list /mnt/tmp/
+    cp $HOME/configs/pkg.list /mnt/home/$username
 }
 
 enable_services() {

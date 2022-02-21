@@ -32,7 +32,7 @@ echo "Adding $username to sudoers"
 sed -i "s/root ALL=(ALL) ALL/root ALL=(ALL) ALL\n$username ALL=(ALL) ALL/g" /etc/sudoers
 
 echo "Installing packages"
-pacman -S --needed --noconfirm - < /mnt/tmp/pkg.list 
+pacman -S --needed --noconfirm - < /home/$username/pkg.list 
 END
 
 }
