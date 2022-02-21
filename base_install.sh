@@ -5,59 +5,10 @@ efi_partition=$2
 root_partition=$3
 username=$4
 hostname=$5
-$password=$6
-$root_password=$7
-$dual_boot=$8
+password=$6
+root_password=$7
+dual_boot=$8
 
-## Helping functions
-#install_polybar_aur () {
-#    arch-chroot /mnt /bin/bash -x << END
-#git clone https://aur.archlinux.org/polybar.git
-#chown -R $username:$username polybar
-#su $username
-#cd polybar
-#makepkg -s -i --noconfirm
-#cd ..
-#exit
-#
-#git clone https://aur.archlinux.org/ttf-unifont.git
-#chown -R $username:$username ttf-unifont
-#su $username
-#cd ttf-unifont
-#makepkg -s -i --noconfirm
-#cd ..
-#exit
-#
-#git clone https://aur.archlinux.org/siji-git.git
-#chown -R $username:$username siji-git
-#su $username
-#cd siji-git
-#makepkg -s -i --noconfirm
-#cd ..
-#exit
-#END
-#}
-#
-#install_i3lock_color_aur() {
-#    arch-chroot /mnt /bin/bash -x << END
-#git clone https://aur.archlinux.org/i3lock-color.git
-#chown -R $username:$username i3lock-color
-#su $username
-#cd i3lock-color
-#makepkg -s -i --noconfirm
-#cd ..
-#exit
-#END
-#}
-#
-#install_vim_plug () {
-#arch-chroot /mnt /bin/bash -x << END
-#curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
-#     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-#END
-#}
-# Check if there is internet connection by pinging google.com 
-# and checking if there are any received packets
 function error () {
     echo "ERROR: $1" 1>&2
 }
@@ -160,8 +111,11 @@ install_base() {
 
     genfstab -U /mnt > /mnt/etc/fstab
 
-    echo "Set password for root..."
-    arch-chroot /mnt passwd root
+    echo "Setting password for root"
+    #arch-chroot /mnt passwd root
+    arch-chroot /mnt /bin/bash << END
+echo -e "$root_password\n$root_password" | passwd root
+END
     echo "Password for root was set"
 
     arch-chroot /mnt /bin/bash -x << END
@@ -211,40 +165,13 @@ add_admin_user() {
     echo "Adding admin user $username and setting password..."
 
     arch-chroot /mnt useradd -m $username
-    arch-chroot /mnt passwd $username
+    arch-chroot /mnt /bin/bash << END
+echo -e "$password\n$password" | passwd $username
+END
 
     echo "Moving pkg.list inside chroot"
-    cp $HOME/configs/pkg.list /mnt/home/$username/
+    cp $HOME/configs/pkg.list /mnt/tmp/
 }
-
-#install_customizations() {
-#    echo "Adding customizations"
-#    arch-chroot /mnt /bin/bash -x << END
-#echo "Adding $username to sudoers"
-#sed -i "s/root ALL=(ALL) ALL/root ALL=(ALL) ALL\n$username ALL=(ALL) ALL/g" /etc/sudoers
-#
-#echo "Installing packages"
-#pacman -S --needed --noconfirm - < /home/$username/pkg.list 
-#END
-#
-#}
-
-#install_custom_packages() {
-#    echo "Installing AUR and other custom packages"
-#    install_polybar_aur
-#    install_i3lock_color_aur
-#    install_vim_plug
-#}
-
-#move_dotfiles() {
-#    echo "Moving dotfiles"
-#    mv $HOME/configs/dotfiles/.* /mnt/home/$username/
-#
-#    echo "Moving configuration files in .config"
-#    [ -d /mnt/home/$username/.config ] || mkdir /mnt/home/$username/.config
-#
-#    mv $HOME/configs/config/* /mnt/home/$username/.config
-#}
 
 enable_services() {
     echo "Enabling services"
@@ -268,10 +195,7 @@ check_net_availability
 encrypt_partitions && format_partitions $dual_boot && mount_partitions && create_swap
 install_base
 add_admin_user
-#install_customizations
-#install_custom_packages
-#move_dotfiles
 enable_services
 change_permissions
 
-echo "Base installation finished"
+echo "Base linux installation finished"

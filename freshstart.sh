@@ -89,6 +89,21 @@ then
     error "At least one of the options has to be specified: -c or -b"
 fi
 
+if [ ! "$PASSWORD" ]
+then
+    read -s PASSWORD
+fi
+
+if [ ! "$ROOT_PASSWORD" ]
+then
+    read -s ROOT_PASSWORD
+fi
+
+if [ ! "$HOSTNAME" ]
+then
+    read HOSTNAME
+fi
+
 if [ "$BASE_INSTALL" ]
 then
     [ ! "$BOOT_PARTITION" ] && error "Boot partition was not specified"
@@ -97,7 +112,16 @@ then
     [ ! "$USERNAME" ] && error "Username for admin user was not specified"
     [ ! "$HOSTNAME" ] && error "Hostname for the machine was not specified"
     [ ! "$PASSWORD" ] && error "Password for admin user was not specified"
+    [ ! "$ROOT_PASSWORD" ] && error "Password for root was not specified"
 
     echo "Installing base arch linux"
-    #./base_install.sh $BOOT_PARTITION $EFI_PARTITION $ROOT_PARTITION $USERNAME $HOSTNAME $PASSWORD $ROOT_PASSWORD $DUAL_BOOT
+    ./base_install.sh $BOOT_PARTITION $EFI_PARTITION $ROOT_PARTITION $USERNAME $HOSTNAME $PASSWORD $ROOT_PASSWORD $DUAL_BOOT
 fi
+
+if [ "$CUSTOMIZATIONS" ]
+then
+    [ ! "$USERNAME" ] && error "Username for admin user was not specified"
+    ./customs_install.sh $USERNAME
+fi
+
+echo "Freshstart has finished"
