@@ -25,11 +25,16 @@ su -c 'curl -fLo /home/$username/.vim/autoload/plug.vim --create-dirs \
 END
 }
 
+add_user_to_sudoers() {
+    arch-chroot /mnt /bin/bash -x << END
+echo "Adding $username to /etc/sudoers"
+sed -i "s/root ALL=(ALL:ALL) ALL/root ALL=(ALL:ALL) ALL\n$username ALL=(ALL:ALL) NOPASSWD: ALL/g" /etc/sudoers
+END
+}
+
 install_custom_packages() {
     echo "Adding customizations"
     arch-chroot /mnt /bin/bash -x << END
-echo "Adding $username to sudoers"
-sed -i "s/root ALL=(ALL:ALL) ALL/root ALL=(ALL:ALL) ALL\n$username ALL=(ALL:ALL) NOPASSWD: ALL/g" /etc/sudoers
 
 echo "Installing packages"
 pacman -S --needed --noconfirm - < /home/$username/pkg.list 
@@ -62,6 +67,7 @@ systemctl enable sddm
 END
 }
 
+add_user_to_sudoers
 install_custom_packages
 install_aur_packages
 move_dotfiles
