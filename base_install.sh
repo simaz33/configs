@@ -58,35 +58,35 @@ format_partitions() {
         mkfs.vfat -n "EFI" $efi_partition
     fi
 
-	echo "Formatting the boot Partition"
-	mkfs.ext4 -L boot $boot_partition
+    echo "Formatting the boot Partition"
+    mkfs.ext4 -L boot $boot_partition
 
-	echo "Formatting the root Partition"
-	mkfs.ext4 -L root /dev/mapper/luks_root
+    echo "Formatting the root Partition"
+    mkfs.ext4 -L root /dev/mapper/luks_root
 }
 
 mount_partitions() {
-	echo "Mounting the root partition"
-	mount /dev/mapper/luks_root /mnt
-	cd /mnt
-	mkdir boot
+    echo "Mounting the root partition"
+    mount /dev/mapper/luks_root /mnt
+    cd /mnt
+    mkdir boot
 
-	echo "Mounting the boot partition"
-	mount $boot_partition boot
+    echo "Mounting the boot partition"
+    mount $boot_partition boot
 
-	echo "Mounting the efi partition"
-	mkdir boot/efi
-	mount $efi_partition boot/efi
+    echo "Mounting the efi partition"
+    mkdir boot/efi
+    mount $efi_partition boot/efi
 }
 
 create_swap() {
-	echo "Creating swap"
-	dd if=/dev/zero of=swap bs=1M count=1024
-	mkswap swap
-	swapon swap
+    echo "Creating swap"
+    dd if=/dev/zero of=swap bs=1M count=1024
+    mkswap swap
+    swapon swap
 
-	echo "Changing swap file permissions to 0600"
-	chmod 0600 swap
+    echo "Changing swap file permissions to 0600"
+    chmod 0600 swap
 }
 
 #Get choice if formatting, encrypting, mounting and creating swap is needed
