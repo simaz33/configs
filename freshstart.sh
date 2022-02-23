@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-function error () {
+error () {
     ./freshstart.sh -h
     echo "ERROR: $1" 1>&2
     exit

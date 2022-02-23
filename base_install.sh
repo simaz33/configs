@@ -9,7 +9,7 @@ password=$6
 root_password=$7
 dual_boot=$8
 
-function error () {
+error () {
     echo "ERROR: $1" 1>&2
 }
 
@@ -88,23 +88,6 @@ create_swap() {
     echo "Changing swap file permissions to 0600"
     chmod 0600 swap
 }
-
-#Get choice if formatting, encrypting, mounting and creating swap is needed
-#get_choice() {
-#    echo "Encrypt and mount partitions? (Y/N):"
-#    while [ true ]
-#    do
-#        read choice
-#        case $choice in
-#            Y|y|N|n)
-#                break
-#                ;;
-#            *)
-#                echo "Error: Please enter Y/y or N/n:"
-#                ;;
-#        esac
-#    done
-#}
 
 install_base() {
     pacstrap /mnt base base-devel efibootmgr grub networkmanager linux linux-firmware 
@@ -187,8 +170,6 @@ change_permissions() {
 }
 
 check_net_availability
-#get_choice
-#[[ $choice =~ [Yy] ]] && encrypt_partitions && format_partitions && mount_partitions && create_swap
 encrypt_partitions && format_partitions $dual_boot && mount_partitions && create_swap
 install_base
 add_admin_user
