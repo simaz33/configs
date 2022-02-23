@@ -91,19 +91,19 @@ fi
 
 if [ ! "$PASSWORD" ]
 then
-    echo "Specify password for new user"
+    echo "Specify password for new user:"
     read -s PASSWORD
 fi
 
 if [ ! "$ROOT_PASSWORD" ]
 then
-    echo "Specify password for root"
+    echo "Specify password for root:"
     read -s ROOT_PASSWORD
 fi
 
 if [ ! "$HOSTNAME" ]
 then
-    echo "Specify hostname for machine"
+    echo "Specify hostname for machine:"
     read HOSTNAME
 fi
 
