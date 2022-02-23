@@ -5,20 +5,20 @@ username=$1
 install_polybar_aur () {
     arch-chroot /mnt /bin/bash -x << END
 su -c 'cd /home/$username && git clone https://aur.archlinux.org/polybar.git && cd polybar && makepkg -s' -s /bin/sh $username
-cd /home/$username/polybar && pacman -U *.zst
+cd /home/$username/polybar && pacman -U *.zst --noconfirm
 
 su -c 'cd /home/$username && git clone https://aur.archlinux.org/ttf-unifont.git && cd ttf-unifont && makepkg -s' -s /bin/sh $username
-cd /home/$username/ttf-unifont && pacman -U *.zst
+cd /home/$username/ttf-unifont && pacman -U *.zst --noconfirm
 
 su -c 'cd /home/$username && git clone https://aur.archlinux.org/siji-git.git && cd siji-git && makepkg -s' -s /bin/sh $username
-cd /home/$username/siji-git && pacman -U *.zst
+cd /home/$username/siji-git && pacman -U *.zst --noconfirm
 END
 }
 
 install_i3lock_color_aur() {
     arch-chroot /mnt /bin/bash -x << END
-su -c 'git clone https://aur.archlinux.org/i3lock-color.git && cd i3lock-color && makepkg -s' -s /bin/sh $username
-cd /home/$username/i3lock-color && pacman -U *.zst
+su -c 'cd /home/$username && git clone https://aur.archlinux.org/i3lock-color.git && cd i3lock-color && makepkg -s' -s /bin/sh $username
+cd /home/$username/i3lock-color && pacman -U *.zst --noconfirm
 END
 }
 
@@ -50,12 +50,12 @@ install_aur_packages() {
 
 move_dotfiles() {
     echo "Moving dotfiles"
-    mv $HOME/configs/dotfiles/.* /mnt/home/$username/
+    mv -f $HOME/configs/dotfiles/.* /mnt/home/$username/
 
     echo "Moving configuration files in .config"
     [ -d /mnt/home/$username/.config ] || mkdir /mnt/home/$username/.config
 
-    mv $HOME/configs/config/* /mnt/home/$username/.config
+    mv -f $HOME/configs/config/* /mnt/home/$username/.config/
 }
 
 enable_services() {
