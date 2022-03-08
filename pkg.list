@@ -50,13 +50,6 @@ simplescreenrecorder
 smbclient
 sudo
 alacritty
-texinfo
-texlive-bibtexextra
-texlive-bin
-texlive-core
-texlive-latexextra
-texlive-pictures
-texlive-science
 tlp
 tmux
 ttf-font-awesome
