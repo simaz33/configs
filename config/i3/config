@@ -222,10 +222,6 @@ exec --no-startup-id "/usr/bin/alacritty --title htop -e htop"
 for_window [title="htop"] move to workspace $ws10
 exec --no-startup-id i3-msg '[workspace=$ws10]' move workspace to output right
 
-exec --no-startup-id "/usr/bin/slack"
-for_window [class="(?i)slack"] move to workspace $ws3
-exec --no-startup-id i3-msg '[workspace=$ws3]' move workspace to output right
-
 # Mode for moving workspaces around
 mode "move_workspace" {
 	bindsym Left move workspace to output left
@@ -245,8 +241,8 @@ bindsym $mod+o mode "move_workspace"
 exec --no-startup-id setxkbmap -layout us,lt -option grp:alt_shift_toggle
 
 # Set background a static color
-#exec --no-startup-id xsetroot -solid "#000000"
-exec --no-startup-id feh --bg-scale /home/simas/Downloads/wallpaper_bg.jpg
+exec --no-startup-id xsetroot -solid "#000000"
+#exec --no-startup-id feh --bg-scale ~/Downloads/wallpaper_bg.jpg
 
 # Window compositor
-exec_always picom -f
+exec_always picom -f --config ~/.config/picom/picom.conf
