@@ -5,8 +5,17 @@ call plug#begin()
 Plug 'sheerun/vim-polyglot'
 Plug 'pineapplegiant/spaceduck', { 'branch': 'main' }
 Plug 'kien/ctrlp.vim'
-Plug 'Valloric/YouCompleteMe'
+Plug 'mattn/vim-lsp-settings'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'keremc/asyncomplete-clang.vim'
 Plug 'mbbill/undotree'
+Plug 'hashivim/vim-terraform'
+Plug 'juliosueiras/vim-terraform-completion'
 
 call plug#end()
 
@@ -58,4 +67,22 @@ endif
 
 colorscheme spaceduck
 
-let g:ycm_global_ycm_extra_conf = '/home/funy/.vim/.ycm_extra_conf.py'
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+
+autocmd User asyncomplete_setup call asyncomplete#register_source(
+    \ asyncomplete#sources#clang#get_source_options())
+
+autocmd User asyncomplete_setup call asyncomplete#register_source(
+    \ asyncomplete#sources#clang#get_source_options({
+    \     'config': {
+    \         'clang_path': '/opt/llvm/bin/clang',
+    \         'clang_args': {
+    \             'default': ['-I/opt/llvm/include'],
+    \             'cpp': ['-std=c++11', '-I/opt/llvm/include']
+    \         }
+    \     }
+    \ }))
+
+let g:lsp_diagnostics_echo_cursor = 1
