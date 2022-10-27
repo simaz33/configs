@@ -5,17 +5,18 @@ call plug#begin()
 Plug 'sheerun/vim-polyglot'
 Plug 'pineapplegiant/spaceduck', { 'branch': 'main' }
 Plug 'kien/ctrlp.vim'
-Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/vim-lsp'
-Plug 'thomasfaingnaert/vim-lsp-ultisnips'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-buffer.vim'
+Plug 'prabirshrestha/asyncomplete-file.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+Plug 'prabirshrestha/asyncomplete-tags.vim'
+Plug 'mattn/vim-lsp-settings'
 Plug 'keremc/asyncomplete-clang.vim'
 Plug 'mbbill/undotree'
 Plug 'hashivim/vim-terraform'
-Plug 'juliosueiras/vim-terraform-completion'
 
 call plug#end()
 
@@ -67,22 +68,39 @@ endif
 
 colorscheme spaceduck
 
+" vim-lsp setup
+function! s:on_lsp_buffer_enabled() abort
+  setlocal omnifunc=lsp#complete
+  setlocal signcolumn=yes
+  echom "loaded"
+  " Find definition of word under cursor
+  nnoremap <buffer> <leader>ld :LspDefinition<CR>
+  " Find callers of word under cursor
+  nnoremap <buffer> <leader>lr :LspReferences<CR>
+  " Rename symbol throughout project
+  nnoremap <buffer> <leader>lR :LspRename<CR>
+  " Show docs (e.g. from libraries)
+  nnoremap <buffer> <leader>lK :LspHover<CR>
+  " Format document layout
+  nnoremap <buffer> <leader>lf :LspDocumentFormat<CR>
+endfunction
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
+let g:UltiSnipsExpandTrigger="<c-q>"
+let g:UltiSnipsJumpForwardTrigger="<c-f>"
+let g:UltiSnipsJumpBackwardTrigger="<c-b>"
+" Weirdly needed to work with Neovim
+let g:UltiSnipsSnippetDirectories = [$HOME.'/.vim/UltiSnips']
+" How UltiSnips splits window when editting snippets
+let g:UltiSnipsEditSplit="vertical"
+
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 
-autocmd User asyncomplete_setup call asyncomplete#register_source(
-    \ asyncomplete#sources#clang#get_source_options())
-
-autocmd User asyncomplete_setup call asyncomplete#register_source(
-    \ asyncomplete#sources#clang#get_source_options({
-    \     'config': {
-    \         'clang_path': '/opt/llvm/bin/clang',
-    \         'clang_args': {
-    \             'default': ['-I/opt/llvm/include'],
-    \             'cpp': ['-std=c++11', '-I/opt/llvm/include']
-    \         }
-    \     }
-    \ }))
-
 let g:lsp_diagnostics_echo_cursor = 1
+
