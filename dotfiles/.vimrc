@@ -32,6 +32,7 @@ set nobackup
 set undodir=~/.vim/undodir
 set undofile
 set incsearch
+set hlsearch
 
 if 1
 
@@ -104,3 +105,4 @@ inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 
 let g:lsp_diagnostics_echo_cursor = 1
 
+set shm+=F
