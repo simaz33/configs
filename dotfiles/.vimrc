@@ -17,6 +17,7 @@ Plug 'mattn/vim-lsp-settings'
 Plug 'keremc/asyncomplete-clang.vim'
 Plug 'mbbill/undotree'
 Plug 'hashivim/vim-terraform'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 call plug#end()
 
@@ -103,6 +104,15 @@ inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 
+let g:lsp_diagnostics_enabled = 0
 let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_diagnostics_virtual_text_enabled = 0
+
+au BufNewFile,BufRead,BufReadPost *.dockerfile set syntax=dockerfile
+
+augroup yaml_fix
+    autocmd!
+    autocmd FileType yaml,yml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0# indentkeys-=<:>
+augroup END
 
 set shm+=F
