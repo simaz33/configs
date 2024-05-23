@@ -1,5 +1,3 @@
-syntax on
-
 call plug#begin()
 
 Plug 'sheerun/vim-polyglot'
@@ -21,6 +19,7 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 call plug#end()
 
+syntax on
 set number
 set noerrorbells
 set tabstop=4 softtabstop=4
@@ -109,10 +108,7 @@ let g:lsp_diagnostics_echo_cursor = 1
 let g:lsp_diagnostics_virtual_text_enabled = 0
 
 au BufNewFile,BufRead,BufReadPost *.dockerfile set syntax=dockerfile
-
-augroup yaml_fix
-    autocmd!
-    autocmd FileType yaml,yml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0# indentkeys-=<:>
-augroup END
+au BufNewFile,BufRead,BufReadPost *.{yaml,yml} set tabstop=2 softtabstop=2 shiftwidth=2
+au BufNewFile,BufRead,BufReadPost *.{js,jsx,json,ts,tsx,css} set tabstop=2 softtabstop=2 shiftwidth=2
 
 set shm+=F
