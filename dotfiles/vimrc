@@ -108,7 +108,8 @@ let g:lsp_diagnostics_echo_cursor = 1
 let g:lsp_diagnostics_virtual_text_enabled = 0
 
 au BufNewFile,BufRead,BufReadPost *.dockerfile set syntax=dockerfile
-au BufNewFile,BufRead,BufReadPost *.{yaml,yml} set tabstop=2 softtabstop=2 shiftwidth=2
+au BufNewFile,BufRead,BufReadPost *.{yaml,yml} set expandtab tabstop=2 softtabstop=2 shiftwidth=2 indentkeys-=0#
 au BufNewFile,BufRead,BufReadPost *.{js,jsx,json,ts,tsx,css} set tabstop=2 softtabstop=2 shiftwidth=2
+" autocmd BufNewFile,BufReadPost * if &filetype == "yaml" | set expandtab shiftwidth=2 indentkeys-=0# | endif
 
 set shm+=F
