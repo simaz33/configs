@@ -1,3 +1,0 @@
-variable "awdawd" {
-  default = "awd"
-}
