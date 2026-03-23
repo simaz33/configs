@@ -1,0 +1,3 @@
+variable "awdawd" {
+  default = "awd"
+}
