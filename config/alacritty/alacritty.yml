@@ -1,34 +1,38 @@
-# Space Duck
-colors:
-  # Default colors
-  primary:
-    background: '#0f111b'
-    foreground: '#ecf0c1'
+# -----------------------------------------------------------------------------
+# TokyoNight Alacritty Colors
+# Theme: Tokyo Night Moon
+# Upstream: https://github.com/folke/tokyonight.nvim/raw/main/extras/alacritty/tokyonight_moon.toml
+# -----------------------------------------------------------------------------
 
-  # Normal colors
-  normal:
-    black:   '#000000'
-    red:     '#e33400'
-    green:   '#5ccc96'
-    yellow:  '#b3a1e6'
-    blue:    '#00a3cc'
-    magenta: '#f2ce00'
-    cyan:    '#7a5ccc'
-    white:   '#686f9a'
+# Default colors
+[colors.primary]
+background = '#222436'
+foreground = '#c8d3f5'
 
-  # Bright colors
-  bright:
-    black:   '#686f9a'
-    red:     '#e33400'
-    green:   '#5ccc96'
-    yellow:  '#b3a1e6'
-    blue:    '#00a3cc'
-    magenta: '#f2ce00'
-    cyan:    '#7a5ccc'
-    white:   '#f0f1ce'
+# Normal colors
+[colors.normal]
+black = '#1b1d2b'
+red = '#ff757f'
+green = '#c3e88d'
+yellow = '#ffc777'
+blue = '#82aaff'
+magenta = '#c099ff'
+cyan = '#86e1fc'
+white = '#828bb8'
 
-font:
-  normal:
-    family: Ubuntu Mono
+# Bright colors
+[colors.bright]
+black = '#444a73'
+red = '#ff8d94'
+green = '#c7fb6d'
+yellow = '#ffd8ab'
+blue = '#9ab8ff'
+magenta = '#caabff'
+cyan = '#b2ebff'
+white = '#c8d3f5'
 
-  size: 15
+[font]
+normal = { family = "HackNerdFont", style = "Regular" }
+bold = { style = "Bold" }
+italic = { style = "Italic" }
+size = 16.0
