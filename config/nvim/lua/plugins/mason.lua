@@ -1,14 +1,7 @@
 return {
     {
         "neovim/nvim-lspconfig",
-        config = function()
-            cmd = { "terraform-ls", "serve" }
-            filetypes = { 'terraform', 'terraform-vars' }
-            root_markers = { '.terraform', '.git' }
-            settings = {
-                ignoreSingleFileWarning = false,
-            }
-        end
+        config = function() end
     },
     {
         "mason-org/mason.nvim",

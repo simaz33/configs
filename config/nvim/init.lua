@@ -23,22 +23,29 @@ require("nvim-tree").setup({
     update_root = true
   }
 })
-
 require("mason").setup()
 require("mason-lspconfig").setup()
 
---vim.lsp.config['terraformls'] = {
---    cmd = { "terraform-ls", "serve" },
---    filetypes = { 'terraform', 'terraform-vars' },
---    root_markers = { '.terraform', '.git' },
---    settings = {
---        ignoreSingleFileWarning = true,
---    }
---}
+vim.keymap.set("n", "<C-e>", ":NvimTreeToggle<CR>", { silent = true, noremap = true })
 
-vim.diagnostic.config({
-    -- virtual_lines = true,
-    virtual_text = true,
+vim.lsp.config["terraformls"] = {
+    cmd = { "terraform-ls", "serve" },
+    filetypes = { "terraform", "terraform-vars" },
+    root_markers = { ".terraform", ".git" },
+    init_options = {
+       ignoreSingleFileWarning = true
+    }
+}
+vim.lsp.enable("terraformls")
+
+vim.api.nvim_create_autocmd({"BufWritePre"}, {
+  pattern = {"*.tf", "*.tfvars", "*.hcl"},
+  callback = function()
+    vim.lsp.buf.format()
+  end,
 })
 
-vim.keymap.set("n", "<C-e>", ":NvimTreeToggle<CR>", { silent = true, noremap = true })
+vim.diagnostic.config({
+    --virtual_lines = true,
+    virtual_text = true,
+})
