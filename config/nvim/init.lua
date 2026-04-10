@@ -15,6 +15,8 @@ vim.opt.smartcase = true
 -- vim.opt.undofile
 vim.opt.incsearch = true
 vim.opt.hlsearch = true
+-- vim.opt.binary = true
+-- vim.opt.nofixendofline = true
 
 require("config.lazy")
 require("nvim-tree").setup({
@@ -49,3 +51,17 @@ vim.diagnostic.config({
     --virtual_lines = true,
     virtual_text = true,
 })
+
+-- Move the cursor to the last known position when re-opening a file
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    local lcount = vim.api.nvim_buf_line_count(0)
+    if mark[1] > 0 and mark[1] <= lcount then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
+})
+
+-- Set to correct path if using 'pyenv'
+-- vim.g.python3_host_prog = '/path/to/python3'
